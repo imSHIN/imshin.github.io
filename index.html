@@ -284,6 +284,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://imshin.github.io/2017/11/15/前端/2017-11-15/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="shin | 鑫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="shin's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/15/前端/2017-11-15/" itemprop="url">使用jQuery实现图片懒加载原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-15T12:19:11+08:00">
+                2017-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/15/前端/2017-11-15/" class="leancloud_visitors" data-flag-title="使用jQuery实现图片懒加载原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>利用jQuery实现图片懒加载的原理。它的基本思想是：在输出HTML的时候，不要直接输出&lt;img src=”xxx”，而是输出如下的img标签：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&quot;/static/loading.gif&quot; data-src=&quot;http://真正的图片地址/xxx.jpg&quot;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">// 注意: 需要引入jQuery和underscore</div><div class="line">$(function() &#123;</div><div class="line">    // 获取window的引用:</div><div class="line">    var $window = $(window);</div><div class="line">    // 获取包含data-src属性的img，并以jQuery对象存入数组:</div><div class="line">    var lazyImgs = _.map($(&apos;img[data-src]&apos;).get(), function (i) &#123;</div><div class="line">        return $(i);</div><div class="line">    &#125;);</div><div class="line">    // 定义事件函数:</div><div class="line">    var onScroll = function() &#123;</div><div class="line">        // 获取页面滚动的高度:</div><div class="line">        var wtop = $window.scrollTop();</div><div class="line">        // 判断是否还有未加载的img:</div><div class="line">        if (lazyImgs.length &gt; 0) &#123;</div><div class="line">            // 获取可视区域高度:</div><div class="line">            var wheight = $window.height();</div><div class="line">            // 存放待删除的索引:</div><div class="line">            var loadedIndex = [];</div><div class="line">            // 循环处理数组的每个img元素:</div><div class="line">            _.each(lazyImgs, function ($i, index) &#123;</div><div class="line">                // 判断是否在可视范围内:</div><div class="line">                if ($i.offset().top - wtop &lt; wheight) &#123;</div><div class="line">                    // 设置src属性:</div><div class="line">                    $i.attr(&apos;src&apos;, $i.attr(&apos;data-src&apos;));</div><div class="line">                    // 添加到待删除数组:</div><div class="line">                    loadedIndex.unshift(index);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            // 删除已处理的对象:</div><div class="line">            _.each(loadedIndex, function (index) &#123;</div><div class="line">                lazyImgs.splice(index, 1);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    // 绑定事件:</div><div class="line">    $window.scroll(onScroll);</div><div class="line">    // 手动触发一次:</div><div class="line">    onScroll();</div></pre></td></tr></table></figure>
+<p><code>onScroll()</code>函数最后要手动触发一次，因为页面显示时，并未触发scroll事件。如果图片已经在可视区域内，这些图片仍然是loading状态，需要手动触发一次，就可以正常显示。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://imshin.github.io/2017/11/10/python/2017-11-10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,7 +1315,7 @@
 <h2 id="帮助我们改进-MWeb"><a href="#帮助我们改进-MWeb" class="headerlink" title="帮助我们改进 MWeb"></a>帮助我们改进 MWeb</h2><p>如果你喜欢 MWeb，想让它变得更好，你可以：</p>
 <ol>
 <li>推荐 MWeb，让更多的人知道。</li>
-<li>给我们发反馈和建议：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x63;&#111;&#100;&#x65;&#114;&#x66;&#111;&#114;&#97;&#x72;&#116;&#x2b;&#x32;&#51;&#51;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#111;&#100;&#x65;&#114;&#x66;&#111;&#114;&#97;&#x72;&#116;&#x2b;&#x32;&#51;&#51;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></li>
+<li>给我们发反馈和建议：<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#99;&#x6f;&#x64;&#101;&#x72;&#x66;&#x6f;&#114;&#97;&#x72;&#116;&#43;&#50;&#x33;&#x33;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#99;&#x6f;&#x64;&#101;&#x72;&#x66;&#x6f;&#114;&#97;&#x72;&#116;&#43;&#50;&#x33;&#x33;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a></li>
 <li>在 Mac App Store 上评价 （如果是在 MAS 上购买的话）。</li>
 </ol>
 
@@ -1664,7 +1820,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1675,7 +1831,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1686,7 +1842,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
