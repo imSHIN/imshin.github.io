@@ -109,7 +109,7 @@
 <meta property="og:site_name" content="shin&#39;s Blog">
 <meta property="og:description" content="腾讯云svn搭建cent6.8 1.安装svnyum install subversion 安装完成可以输入 svnserve --version 查看svn版本,查询到就表示成功 2.创建svn版本库目录比如我是创建在/var/svn下 mkdir /var/svn (当然你也可以创建在其他地方) 3.创建版本库我的目录名是svnRepos svnadmin create /var/svn/sv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-27T16:12:01.000Z">
+<meta property="og:updated_time" content="2017-11-30T05:17:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="腾讯云svn搭建">
 <meta name="twitter:description" content="腾讯云svn搭建cent6.8 1.安装svnyum install subversion 安装完成可以输入 svnserve --version 查看svn版本,查询到就表示成功 2.创建svn版本库目录比如我是创建在/var/svn下 mkdir /var/svn (当然你也可以创建在其他地方) 3.创建版本库我的目录名是svnRepos svnadmin create /var/svn/sv">
@@ -418,7 +418,7 @@
 <p>左边用户名,右边密码</p>
 <h2 id="7-启动svn"><a href="#7-启动svn" class="headerlink" title="7.启动svn"></a>7.启动svn</h2><p><code>svnserve -d -r /var/svn</code></p>
 <p>使用<code>ps aux | grep svn</code>查看是否已经启动了svn</p>
-<h2 id="8-停止svn"><a href="#8-停止svn" class="headerlink" title="8.停止svn"></a>8.停止svn</h2><p><code>kiallall svncerve</code></p>
+<h2 id="8-停止svn"><a href="#8-停止svn" class="headerlink" title="8.停止svn"></a>8.停止svn</h2><p><code>kiallall svnserve</code></p>
 <p>在修改配置后要重启才生效,所以修改后,先停止,再启动.</p>
 <h2 id="9-设置开机自启"><a href="#9-设置开机自启" class="headerlink" title="9.设置开机自启"></a>9.设置开机自启</h2><p>我放在root目录下</p>
 <p><code>vi /root/svn_startup.sh</code></p>
