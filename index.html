@@ -284,6 +284,205 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://imshin.github.io/2017/11/28/svn/2017-11-28/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="shin | 鑫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="shin's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/28/svn/2017-11-28/" itemprop="url">腾讯云svn搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-28T00:10:14+08:00">
+                2017-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/svn/" itemprop="url" rel="index">
+                    <span itemprop="name">svn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/28/svn/2017-11-28/" class="leancloud_visitors" data-flag-title="腾讯云svn搭建">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="腾讯云svn搭建"><a href="#腾讯云svn搭建" class="headerlink" title="腾讯云svn搭建"></a>腾讯云svn搭建</h1><p>cent6.8</p>
+<h2 id="1-安装svn"><a href="#1-安装svn" class="headerlink" title="1.安装svn"></a>1.安装svn</h2><p><code>yum install subversion</code></p>
+<p>安装完成可以输入</p>
+<p><code>svnserve --version</code></p>
+<p>查看svn版本,查询到就表示成功</p>
+<h2 id="2-创建svn版本库目录"><a href="#2-创建svn版本库目录" class="headerlink" title="2.创建svn版本库目录"></a>2.创建svn版本库目录</h2><p>比如我是创建在/var/svn下</p>
+<p><code>mkdir /var/svn</code></p>
+<p>(当然你也可以创建在其他地方)</p>
+<h2 id="3-创建版本库"><a href="#3-创建版本库" class="headerlink" title="3.创建版本库"></a>3.创建版本库</h2><p>我的目录名是svnRepos</p>
+<p><code>svnadmin create /var/svn/svnRepos</code></p>
+<p>然后进入到创建的目录中</p>
+<p><code>cd /var/svn/svnRepos</code></p>
+<p>svnRepos这里面会有几个目录,其中的conf文件夹有几个重要的文件夹:</p>
+<ul>
+<li>svnserve.cont  //各种配置的文件</li>
+<li>authz          //权限管理配置的文件</li>
+<li>passwd            //用户名密码的文件</li>
+</ul>
+<h2 id="4-配置svnserve-conf文件"><a href="#4-配置svnserve-conf文件" class="headerlink" title="4.配置svnserve.conf文件"></a>4.配置svnserve.conf文件</h2><p>进入到conf文件夹</p>
+<p><code>cd conf</code></p>
+<p>然后配置svnserve.conf</p>
+<p><code>vi svnserve.conf</code></p>
+<p>修改如下,把这几行前的<code>#</code>去掉(注意:空格也要去掉)</p>
+<p>(vim的使用具体自己查询,这里不做描述)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//匿名访问的权限，可以是read、write、none，默认为read，在此因为我要建立我团队的私人版本库，故我设置为none</div><div class="line">anon-access=none</div><div class="line"></div><div class="line">//使授权用户有写权限，参数也是如上3个</div><div class="line">auth-access=write</div><div class="line"></div><div class="line">//使用哪个文件作为账号文件，在此指定在conf文件里面的另外一个文件passwd</div><div class="line">password-db=passwd</div><div class="line"></div><div class="line">//使用哪个文件作为权限文件，在此指定在conf文件里面的另外一个文件authz</div><div class="line">authz-db=authz</div><div class="line"></div><div class="line">//认证命名空间，说白了就是版本库的所在目录</div><div class="line">realm=/var/svn</div></pre></td></tr></table></figure>
+<h2 id="5-配置antuz文件"><a href="#5-配置antuz文件" class="headerlink" title="5.配置antuz文件"></a>5.配置antuz文件</h2><p>老样子用vim打开authz文件</p>
+<p><code>vi authz</code></p>
+<p>group可以把passwd里创建的用户进行分组,当然你也可以不设置,这里根据你的需求具体修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[groups]            </div><div class="line">//因为只有一个版本库，故使用[/]</div><div class="line">[/]                 //库目录权限</div><div class="line">admin = rw           //用户admin的权限是rw(read write)</div><div class="line">* =				//剩余用户没有权限</div></pre></td></tr></table></figure>
+<h2 id="6-配置passwd文件"><a href="#6-配置passwd文件" class="headerlink" title="6.配置passwd文件"></a>6.配置passwd文件</h2><p><code>vi passwd</code></p>
+<p>左边用户名,右边密码</p>
+<h2 id="7-启动svn"><a href="#7-启动svn" class="headerlink" title="7.启动svn"></a>7.启动svn</h2><p><code>svnserve -d -r /var/svn</code></p>
+<p>使用<code>ps aux | grep svn</code>查看是否已经启动了svn</p>
+<h2 id="8-停止svn"><a href="#8-停止svn" class="headerlink" title="8.停止svn"></a>8.停止svn</h2><p><code>kiallall svncerve</code></p>
+<p>在修改配置后要重启才生效,所以修改后,先停止,再启动.</p>
+<h2 id="9-设置开机自启"><a href="#9-设置开机自启" class="headerlink" title="9.设置开机自启"></a>9.设置开机自启</h2><p>我放在root目录下</p>
+<p><code>vi /root/svn_startup.sh</code></p>
+<p>用vim输入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash </div><div class="line">/usr/bin/svnserve -d -r /var/svn/</div></pre></td></tr></table></figure>
+<p>/usr/bin/svnserve 是svnserve的路径,最好写绝对路径，因为启动的时候，环境变量也许没加载。 </p>
+<p><code>which svnserve //绝对路径</code></p>
+<p>然后修改该脚本的执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod 777 svn_startup.sh</div></pre></td></tr></table></figure>
+<p>最后,加入到开机自动运行 </p>
+<p><code>vi /etc/rc.d/rc.local</code></p>
+<p>在末尾添加脚本的路径<code>/root/svn_startup.sh</code></p>
+<p>这样重启就可以自动运行了</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://imshin.github.io/2017/11/16/生活/2017-11-16/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1470,7 +1669,7 @@
 <h2 id="帮助我们改进-MWeb"><a href="#帮助我们改进-MWeb" class="headerlink" title="帮助我们改进 MWeb"></a>帮助我们改进 MWeb</h2><p>如果你喜欢 MWeb，想让它变得更好，你可以：</p>
 <ol>
 <li>推荐 MWeb，让更多的人知道。</li>
-<li>给我们发反馈和建议：<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#99;&#x6f;&#x64;&#x65;&#x72;&#102;&#111;&#114;&#97;&#x72;&#x74;&#43;&#x32;&#x33;&#x33;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#99;&#x6f;&#x64;&#x65;&#x72;&#102;&#111;&#114;&#97;&#x72;&#x74;&#43;&#x32;&#x33;&#x33;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a></li>
+<li>给我们发反馈和建议：<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x63;&#x6f;&#x64;&#101;&#x72;&#x66;&#111;&#114;&#x61;&#114;&#116;&#x2b;&#x32;&#x33;&#51;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x63;&#x6f;&#x64;&#101;&#x72;&#x66;&#111;&#114;&#x61;&#114;&#116;&#x2b;&#x32;&#x33;&#51;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;</a></li>
 <li>在 Mac App Store 上评价 （如果是在 MAS 上购买的话）。</li>
 </ol>
 
@@ -1638,159 +1837,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imshin.github.io/2017/09/15/hellw mweb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="shin | 鑫">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shin's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/15/hellw mweb/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T19:37:57+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Diary/" itemprop="url" rel="index">
-                    <span itemprop="name">Diary</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/15/hellw mweb/" class="leancloud_visitors" data-flag-title="">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这是第一个文章 测试提交</p>
-<h3 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1840,7 +1886,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1851,7 +1897,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1862,7 +1908,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
